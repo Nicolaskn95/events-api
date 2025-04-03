@@ -2,11 +2,10 @@ import express from "express"
 import { MongoClient } from "mongodb"
 import cors from "cors"
 import dotenv from "dotenv"
-import eventRouter from "./src/routes/events.routes.js" // Note the .js extension
+import eventRouter from "./src/routes/events.routes.js"
 
 dotenv.config()
 
-// Validate required environment variables
 if (!process.env.MONGODB_URI) {
   throw new Error("Missing MONGODB_URI environment variable")
 }
@@ -24,27 +23,33 @@ async function connectToDatabase() {
   try {
     await client.connect()
     console.log("Connected to MongoDB")
-    return client.db(process.env.DB_NAME || "eventDB") // Use env variable or default
+    return client.db(process.env.DB_NAME || "eventDB")
   } catch (err) {
     console.error("MongoDB connection error:", err)
-    process.exit(1) // Exit if can't connect to DB
+    process.exit(1)
   }
 }
 
-// Initialize database connection and make it available to routes
 ;(async () => {
   const db = await connectToDatabase()
-  app.locals.db = db // Make db available in routes via req.app.locals.db
+  app.locals.db = db
 
-  // Routes
+  app.get("/", (req, res) => {
+    res.json({
+      message: "Bem-vindo à API de Eventos",
+      endpoints: {
+        events: "/api/events",
+        documentation: "todo:",
+      },
+    })
+  })
+
   app.use("/api/events", eventRouter)
 
-  // 404 Handler
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" })
   })
 
-  // Error Handler
   app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).json({ message: "Internal Server Error" })
@@ -56,7 +61,6 @@ async function connectToDatabase() {
   })
 })()
 
-// Handle graceful shutdown
 process.on("SIGINT", async () => {
   await client.close()
   process.exit(0)
