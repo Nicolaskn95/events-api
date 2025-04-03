@@ -2,7 +2,7 @@ import express from "express"
 import { MongoClient } from "mongodb"
 import cors from "cors"
 import dotenv from "dotenv"
-import eventRouter from "./src/routes/events.routes.js"
+import eventRouter from "./routes/events.routes.js"
 
 dotenv.config()
 
