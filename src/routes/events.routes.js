@@ -18,15 +18,15 @@ router.get("/", getAllEvents)
 router.get("/search", searchEvents)
 
 // GET single event
-router.get("/api/events/:id", getEventById)
+router.get("/:id", getEventById)
 
 // POST create event
 router.post("/", validateEvent, createEvent)
 
 // PUT update event
-router.put("/api/events/:id", validateEvent, updateEvent)
+router.put("/:id", validateEvent, updateEvent)
 
 // DELETE event
-router.delete("/api/events/:id", deleteEvent)
+router.delete("/:id", deleteEvent)
 
 export default router

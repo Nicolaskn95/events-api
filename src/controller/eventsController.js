@@ -51,7 +51,6 @@ export const searchEvents = async (req, res) => {
 
 export const getEventById = async (req, res) => {
   try {
-    console.log("sssss")
     const { id } = req.params
     const db = req.app.locals.db
     const eventsCollection = db.collection("events")
