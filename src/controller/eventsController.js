@@ -6,10 +6,7 @@ export const getAllEvents = async (req, res) => {
     const db = req.app.locals.db
     const eventsCollection = db.collection("events")
     const events = await eventsCollection.find().toArray()
-    res.json({
-      success: true,
-      data: events,
-    })
+    res.json(events)
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -42,10 +39,7 @@ export const searchEvents = async (req, res) => {
       })
       .toArray()
 
-    res.json({
-      success: true,
-      data: events,
-    })
+    res.json(events)
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -71,10 +65,7 @@ export const getEventById = async (req, res) => {
       })
     }
 
-    res.json({
-      success: true,
-      data: event,
-    })
+    res.json(event)
   } catch (error) {
     res.status(500).json({
       success: false,
