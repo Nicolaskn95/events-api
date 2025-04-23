@@ -1,5 +1,6 @@
 import { validationResult } from "express-validator"
 import { ObjectId } from "mongodb"
+import queryString from "query-string"
 
 export const getAllEvents = async (req, res) => {
   try {
@@ -20,27 +21,54 @@ export const searchEvents = async (req, res) => {
   try {
     const db = req.app.locals.db
     const eventsCollection = db.collection("events")
-    const threeMonthsLater = new Date()
-    threeMonthsLater.setMonth(threeMonthsLater.getMonth() + 3)
 
-    const events = await eventsCollection
-      .find({
-        $and: [
-          {
-            date: {
-              $gte: new Date(),
-              $lte: threeMonthsLater,
-            },
-          },
-          {
-            $or: [{ capacity: { $gte: 100 } }, { ticketPrice: { $lte: 50 } }],
-          },
-        ],
-      })
-      .toArray()
+    let queryParams = req.query
+    // Caso tudo venha dentro de q (como uma string), faz o parse:
+    if (typeof req.query.q === "string" && req.query.q.includes("&")) {
+      queryParams = queryString.parse(req.query.q)
+    }
 
-    res.json(events)
+    const {
+      q: searchTerm,
+      startDate,
+      endDate,
+      minPrice,
+      maxPrice,
+    } = queryParams
+
+    const query = {}
+
+    // Termo de busca (em título ou descrição)
+    if (searchTerm) {
+      const decodedSearchTerm = decodeURIComponent(searchTerm)
+      const cleanTerm = decodedSearchTerm.replace(/^q=/, "")
+
+      query.title = { $regex: cleanTerm, $options: "i" }
+    }
+
+    // Filtro por datas
+    if (startDate || endDate) {
+      query.date = {}
+      if (startDate) query.date.$gte = new Date(startDate)
+      if (endDate) query.date.$lte = new Date(endDate)
+    }
+
+    // Filtro por faixa de preço
+    if (minPrice || maxPrice) {
+      query.ticketPrice = {}
+      if (minPrice) query.ticketPrice.$gte = parseFloat(minPrice)
+      if (maxPrice) query.ticketPrice.$lte = parseFloat(maxPrice)
+    }
+
+    const events = await eventsCollection.find(query).toArray()
+
+    res.json({
+      success: true,
+      data: events,
+      count: events.length,
+    })
   } catch (error) {
+    console.error("Search error:", error)
     res.status(500).json({
       success: false,
       error: "Search failed",
@@ -79,7 +107,6 @@ export const createEvent = async (req, res) => {
   const db = req.app.locals.db
   const eventsCollection = db.collection("events")
   const errors = validationResult(req)
-
   if (!errors.isEmpty()) {
     return res.status(400).json({
       success: false,
@@ -95,7 +122,7 @@ export const createEvent = async (req, res) => {
     }
 
     const result = await eventsCollection.insertOne(eventData)
-    console.log(result)
+
     if (!result.acknowledged) {
       return res.status(500).json({
         success: false,
@@ -112,7 +139,7 @@ export const createEvent = async (req, res) => {
     res.status(400).json({
       success: false,
       error: "Failed to create event",
-      details: error.message,
+      message: error.message,
     })
   }
 }
