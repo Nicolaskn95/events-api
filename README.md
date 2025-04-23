@@ -10,10 +10,15 @@ API RESTful para gerenciamento de eventos desenvolvida com Node.js, Express e Mo
 - **Backend**: Node.js 18+, Express.js
 - **Banco de Dados**: MongoDB
 - **Validação**: express-validator
-- 
-## 🔗 Links
-- [Repositório GitHub](https://github.com/Nicolaskn95/events-api)
-- [API Pública](https://events-api-fatec.vercel.app/)
+
+## 🔗 Links Importantes
+- **Frontend**:
+  - [Repositório GitHub](https://github.com/Nicolaskn95/events-web)
+  - [Aplicação Web](https://events-web-eta.vercel.app)
+  
+- **Backend**:
+  - [Repositório GitHub](https://github.com/link-backend)
+  - [API Pública](https://events-api-fatec.vercel.app/)
 
 ## 📊 Modelo de Dados
 ```javascript
