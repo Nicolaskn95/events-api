@@ -47,9 +47,13 @@ export const searchEvents = async (req, res) => {
     }
 
     // Filtro por datas
-    if (startDate || endDate) {
+    if (startDate) {
       query.date = {}
       if (startDate) query.date.$gte = new Date(startDate)
+    }
+
+    if (endDate) {
+      query.date = {}
       if (endDate) query.date.$lte = new Date(endDate)
     }
 
