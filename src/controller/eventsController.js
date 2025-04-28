@@ -37,8 +37,6 @@ export const searchEvents = async (req, res) => {
     } = queryParams
 
     const query = {}
-    query.ticketPrice = {}
-    query.date = {}
 
     // Termo de busca (em título ou descrição)
     if (searchTerm) {
@@ -49,21 +47,17 @@ export const searchEvents = async (req, res) => {
     }
 
     // Filtro por datas
-    if (startDate) {
-      query.date.$gte = new Date(startDate)
-    }
-
-    if (endDate) {
-      query.date.$lte = new Date(endDate)
+    if (startDate || endDate) {
+      query.date = {}
+      if (startDate) query.date.$gte = new Date(startDate)
+      if (endDate) query.date.$lte = new Date(endDate)
     }
 
     // Filtro por faixa de preço
-    if (maxPrice) {
-      query.ticketPrice.$lte = parseFloat(maxPrice)
-    }
-
-    if (minPrice) {
-      query.ticketPrice.$gte = parseFloat(minPrice)
+    if (minPrice || maxPrice) {
+      query.ticketPrice = {}
+      if (minPrice) query.ticketPrice.$gte = parseFloat(minPrice)
+      if (maxPrice) query.ticketPrice.$lte = parseFloat(maxPrice)
     }
 
     const events = await eventsCollection.find(query).toArray()
