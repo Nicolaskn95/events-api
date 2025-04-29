@@ -35,8 +35,9 @@ export const searchEvents = async (req, res) => {
     const maxPrice = queryParams.maxPrice
 
     const query = {}
-    const decodedSearchTerm = decodeURIComponent(searchTerm)
+    const decodedSearchTerm = searchTerm.replace(/\+/, " ")
     const cleanTerm = decodedSearchTerm.replace(/q=/, "")
+
     // console.log("decodedSearchTerm", decodedSearchTerm)
 
     // Termo de busca (em título ou descrição)
