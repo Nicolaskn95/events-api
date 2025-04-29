@@ -28,38 +28,38 @@ export const searchEvents = async (req, res) => {
       queryParams = queryString.parse(req.query.q)
     }
 
-    const {
-      q: searchTerm,
-      startDate,
-      endDate,
-      minPrice,
-      maxPrice,
-    } = queryParams
+    const searchTerm = queryParams.q
+    const startDate = queryParams.startDate
+    const endDate = queryParams.endDate
+    const minPrice = queryParams.minPrice
+    const maxPrice = queryParams.maxPrice
 
     const query = {}
+    const decodedSearchTerm = decodeURIComponent(searchTerm)
+    const cleanTerm = decodedSearchTerm.replace(/q=/, "")
+    // console.log("decodedSearchTerm", decodedSearchTerm)
 
     // Termo de busca (em título ou descrição)
-    if (searchTerm) {
-      const decodedSearchTerm = decodeURIComponent(searchTerm)
-      const cleanTerm = decodedSearchTerm.replace(/^q=/, "")
-
+    if (cleanTerm != undefined) {
       query.title = { $regex: cleanTerm, $options: "i" }
     }
 
     // Filtro por datas
     if (startDate || endDate) {
+      // console.log("startDate", startDate)
+      // console.log("endDate", endDate)
       query.date = {}
-      if (startDate) query.date.$gte = new Date(startDate)
-      if (endDate) query.date.$lte = new Date(endDate)
+      if (startDate != undefined) query.date.$gte = new Date(startDate)
+      if (endDate != undefined) query.date.$lte = new Date(endDate)
     }
 
     // Filtro por faixa de preço
     if (minPrice || maxPrice) {
       query.ticketPrice = {}
-      if (minPrice) query.ticketPrice.$gte = parseFloat(minPrice)
-      if (maxPrice) query.ticketPrice.$lte = parseFloat(maxPrice)
+      if (minPrice != undefined) query.ticketPrice.$gte = parseFloat(minPrice)
+      if (maxPrice != undefined) query.ticketPrice.$lte = parseFloat(maxPrice)
     }
-
+    console.log(query)
     const events = await eventsCollection.find(query).toArray()
 
     res.json({
