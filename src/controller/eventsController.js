@@ -41,7 +41,9 @@ export const searchEvents = async (req, res) => {
 
     // Termo de busca (em título ou descrição)
     if (cleanTerm != undefined) {
-      query.title = { $regex: cleanTerm, $options: "i" }
+      if (!cleanTerm.includes("undefined")) {
+        query.title = { $regex: cleanTerm, $options: "i" }
+      }
     }
 
     // Filtro por datas
