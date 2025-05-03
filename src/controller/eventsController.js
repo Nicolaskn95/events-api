@@ -38,25 +38,20 @@ export const searchEvents = async (req, res) => {
     const decodedSearchTerm = searchTerm.replace(/\+/, " ")
     const cleanTerm = decodedSearchTerm.replace(/q=/, "")
 
-    // console.log("decodedSearchTerm", decodedSearchTerm)
-
-    // Termo de busca (em título ou descrição)
     if (cleanTerm != undefined) {
       if (!cleanTerm.includes("undefined")) {
         query.title = { $regex: cleanTerm, $options: "i" }
       }
     }
 
-    // Filtro por datas
     if (startDate || endDate) {
-      // console.log("startDate", startDate)
-      // console.log("endDate", endDate)
       query.date = {}
+      console.log("Start Date:", startDate)
+      console.log("End Date:", endDate)
       if (startDate != undefined) query.date.$gte = new Date(startDate)
       if (endDate != undefined) query.date.$lte = new Date(endDate)
     }
 
-    // Filtro por faixa de preço
     if (minPrice || maxPrice) {
       query.ticketPrice = {}
       if (minPrice != undefined) query.ticketPrice.$gte = parseFloat(minPrice)
