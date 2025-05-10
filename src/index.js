@@ -3,6 +3,7 @@ import { MongoClient } from "mongodb"
 import cors from "cors"
 import dotenv from "dotenv"
 import eventRouter from "./routes/events.routes.js"
+import usersRouter from "./routes/users.routes.js"
 
 dotenv.config()
 
@@ -34,17 +35,8 @@ async function connectToDatabase() {
   const db = await connectToDatabase()
   app.locals.db = db
 
-  app.get("/", (req, res) => {
-    res.json({
-      message: "Bem-vindo à API de Eventos",
-      endpoints: {
-        events: "/api/events",
-        documentation: "todo:",
-      },
-    })
-  })
-
   app.use("/api/events", eventRouter)
+  app.use("/api/users", usersRouter)
 
   app.use((req, res) => {
     res.status(404).json({ message: "Route not found" })

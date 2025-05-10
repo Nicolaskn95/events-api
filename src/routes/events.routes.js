@@ -6,7 +6,7 @@ import {
   updateEvent,
   deleteEvent,
   searchEvents,
-} from "../controller/eventsController.js"
+} from "../controller/events.js"
 import { validateEvent } from "../middleware/validations.js"
 
 const router = express.Router()

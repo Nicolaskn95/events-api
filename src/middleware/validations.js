@@ -48,3 +48,68 @@ export const validateEvent = [
 
   validateRequest,
 ]
+
+export const validateUser = [
+  check("name")
+    .not()
+    .isEmpty()
+    .withMessage("É obrigatório informa o nome")
+    .isAlpha("pt-BR", { ignore: " " })
+    .withMessage("O nome deve conter apenas letras e espaços")
+    .isLength({ min: 3 })
+    .withMessage("O nome deve ter pelo menos 3 caracteres")
+    .isLength({ max: 100 })
+    .withMessage("O nome deve ter no máximo 100 caracteres"),
+
+  check("email")
+    .notEmpty()
+    .withMessage("O email é obrigatório.")
+    .isEmail()
+    .withMessage("O email deve ser válido.")
+    .normalizeEmail(),
+  // .custom(async (value, { req }) => {
+  //   const db = req.app.locals.db
+  //   const usersCollection = db.collection("users")
+  //   return await usersCollection
+  //     .find({ email: { $eq: value } })
+  //     .toArray()
+  //     .then((email) => {
+  //       if (email.length && !req.params.id) {
+  //         return Promise.reject(`O email ${value} já está em existe.`)
+  //       }
+  //     })
+  // })
+  check("password")
+    .notEmpty()
+    .withMessage("A senha é obrigatória.")
+    .isLength({ min: 6 })
+    .withMessage("A senha deve ter pelo menos 6 caracteres.")
+    .isStrongPassword({
+      minLength: 6,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+    })
+    .withMessage(
+      "A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um número e um símbolo."
+    ),
+
+  check("active")
+    .default(true)
+    .isBoolean()
+    .withMessage("O campo 'active' deve ser um valor booleano."),
+
+  check("type")
+    .notEmpty()
+    .withMessage("O tipo de usuário é obrigatório.")
+    .isIn(["customer", "admin"])
+    .withMessage("O tipo de usuário deve ser 'Cliente' ou 'Admin'."),
+
+  check("avatar")
+    .optional({ nullable: true })
+    .isURL()
+    .withMessage("O avatar deve ser uma URL válida."),
+
+  validateRequest,
+]
