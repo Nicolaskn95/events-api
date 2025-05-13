@@ -1,3 +1,5 @@
+@token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjgxZWQ0M2Y5NTg5M2Q4ZDdiNzcyZjkyIn0sImlhdCI6MTc0NzA5ODIxNCwiZXhwIjoxNzQ3MTg0NjE0fQ.BjzYXJk6TL34I7R9WRJI5mIQcc-9XNs7-44HXfdA7Hk
+
 ###
 # @prompt password
 POST http://localhost:3001/api/users
@@ -9,3 +11,18 @@ Content-Type: application/json
     "password": "{{password}}",
     "type": "admin"
 }
+
+###
+# @prompt password
+POST http://localhost:3001/api/users/login
+Content-Type: application/json
+
+{
+    "email": "matheusmomiy@zmail.com",
+    "password": "{{password}}"
+}
+
+###
+GET http://localhost:3001/api/events
+Content-Type: application/json
+access-token: {{token}}

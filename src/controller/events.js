@@ -48,6 +48,10 @@ export const searchEvents = async (req, res) => {
       query.date = {}
       console.log("Start Date:", startDate)
       console.log("End Date:", endDate)
+      if (startDate === endDate) {
+        query.date = new Date(startDate)
+        return
+      }
       if (startDate != undefined) query.date.$gte = new Date(startDate)
       if (endDate != undefined) query.date.$lte = new Date(endDate)
     }

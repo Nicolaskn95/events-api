@@ -1,4 +1,5 @@
 import express from "express"
+import authentication from "../middleware/authentication.js"
 import {
   getAllEvents,
   createEvent,
@@ -12,21 +13,21 @@ import { validateEvent } from "../middleware/validations.js"
 const router = express.Router()
 
 // GET all events
-router.get("/", getAllEvents)
+router.get("/", authentication, getAllEvents)
 
 // GET events with search
-router.get("/search", searchEvents)
+router.get("/search", authentication, searchEvents)
 
 // GET single event
-router.get("/:id", getEventById)
+router.get("/:id", authentication, getEventById)
 
 // POST create event
-router.post("/", validateEvent, createEvent)
+router.post("/", authentication, validateEvent, createEvent)
 
 // PUT update event
-router.put("/:id", validateEvent, updateEvent)
+router.put("/:id", authentication, validateEvent, updateEvent)
 
 // DELETE event
-router.delete("/:id", deleteEvent)
+router.delete("/:id", authentication, deleteEvent)
 
 export default router
