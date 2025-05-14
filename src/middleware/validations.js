@@ -1,17 +1,17 @@
-import { check, validationResult, body } from "express-validator"
+import { check, validationResult, body } from "express-validator";
 
 //Middleware para verificar os resultados da validação
 export const validateRequest = (req, res, next) => {
-  const errors = validationResult(req)
+  const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({
       errors: true,
       message: "Erro de validação",
       errors: errors.array(),
-    })
+    });
   }
-  next()
-}
+  next();
+};
 
 export const validateEvent = [
   body("title")
@@ -47,7 +47,7 @@ export const validateEvent = [
     .withMessage("A descrição deve ter pelo menos 10 caracteres."),
 
   validateRequest,
-]
+];
 
 export const validateUser = [
   check("name")
@@ -101,6 +101,7 @@ export const validateUser = [
     .withMessage("O campo 'active' deve ser um valor booleano."),
 
   check("type")
+    .default("admin")
     .notEmpty()
     .withMessage("O tipo de usuário é obrigatório.")
     .isIn(["customer", "admin"])
@@ -112,4 +113,4 @@ export const validateUser = [
     .withMessage("O avatar deve ser uma URL válida."),
 
   validateRequest,
-]
+];

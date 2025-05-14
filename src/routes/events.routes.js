@@ -1,5 +1,5 @@
-import express from "express"
-import authentication from "../middleware/authentication.js"
+import express from "express";
+import authentication from "../middleware/authentication.js";
 import {
   getAllEvents,
   createEvent,
@@ -7,27 +7,27 @@ import {
   updateEvent,
   deleteEvent,
   searchEvents,
-} from "../controller/events.js"
-import { validateEvent } from "../middleware/validations.js"
+} from "../controller/events.controller.js";
+import { validateEvent } from "../middleware/validations.js";
 
-const router = express.Router()
+const router = express.Router();
 
 // GET all events
-router.get("/", authentication, getAllEvents)
+router.get("/", authentication, getAllEvents);
 
 // GET events with search
-router.get("/search", authentication, searchEvents)
+router.get("/search", authentication, searchEvents);
 
 // GET single event
-router.get("/:id", authentication, getEventById)
+router.get("/:id", authentication, getEventById);
 
 // POST create event
-router.post("/", authentication, validateEvent, createEvent)
+router.post("/", authentication, validateEvent, createEvent);
 
 // PUT update event
-router.put("/:id", authentication, validateEvent, updateEvent)
+router.put("/:id", authentication, validateEvent, updateEvent);
 
 // DELETE event
-router.delete("/:id", authentication, deleteEvent)
+router.delete("/:id", authentication, deleteEvent);
 
-export default router
+export default router;

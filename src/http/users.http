@@ -2,14 +2,13 @@
 
 ###
 # @prompt password
-POST http://localhost:3001/api/users
+POST http://localhost:3001/api/users/register
 Content-Type: application/json
 
 {
     "name": "Matheus Tadao Momiy",
     "email": "matheusmomiy@zmail.com",
     "password": "{{password}}",
-    "type": "admin"
 }
 
 ###
