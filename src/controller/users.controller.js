@@ -32,7 +32,7 @@ export const login = async (req, res) => {
         error: [
           {
             value: `${email}`,
-            msg: `Email ${email} não está cadastrado`,
+            msg: `Email: ${email} não está cadastrado`,
             param: "email",
           },
         ],
