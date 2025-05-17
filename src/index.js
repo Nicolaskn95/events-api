@@ -4,6 +4,8 @@ import cors from "cors"
 import dotenv from "dotenv"
 import eventRouter from "./routes/events.routes.js"
 import usersRouter from "./routes/users.routes.js"
+import swaggerUi from "swagger-ui-express"
+import swaggerDocument from "./swagger.json" assert { type: "json" }
 
 dotenv.config()
 
@@ -16,6 +18,9 @@ const app = express()
 // Middleware
 app.use(cors())
 app.use(express.json())
+
+// Swagger setup
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
 // MongoDB Connection
 const client = new MongoClient(process.env.MONGODB_URI)
@@ -50,6 +55,7 @@ async function connectToDatabase() {
   const PORT = process.env.PORT || 3000
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
+    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`)
   })
 })()
 

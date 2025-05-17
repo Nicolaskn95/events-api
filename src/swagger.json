@@ -1,0 +1,180 @@
+    {
+        "swagger": "2.0",
+        "info": {
+            "version": "1.0.0",
+            "title": "Events API",
+            "description": "API for managing events"
+        },
+        "host": "localhost:3000",
+        "basePath": "/api",
+        "schemes": [
+            "http"
+        ],
+        "paths": {
+            "/events": {
+                "get": {
+                    "summary": "Get all events",
+                    "description": "Retrieve a list of all events",
+                    "security": [
+                        {
+                            "apiKeyAuth": []
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "A list of events",
+                            "schema": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/definitions/Event"
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "summary": "Create a new event",
+                    "description": "Add a new event to the database",
+                    "security": [
+                        {
+                            "apiKeyAuth": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "in": "body",
+                            "name": "event",
+                            "required": true,
+                            "schema": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "201": {
+                            "description": "Event created successfully"
+                        }
+                    }
+                }
+            },
+            "/events/{id}": {
+                "get": {
+                    "summary": "Get an event by ID",
+                    "description": "Retrieve a single event by its ID",
+                    "security": [
+                        {
+                            "apiKeyAuth": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "required": true,
+                            "type": "string"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Event details",
+                            "schema": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        },
+                        "404": {
+                            "description": "Event not found"
+                        }
+                    }
+                },
+                "put": {
+                    "summary": "Update an event by ID",
+                    "description": "Modify an existing event",
+                    "security": [
+                        {
+                            "apiKeyAuth": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "required": true,
+                            "type": "string"
+                        },
+                        {
+                            "in": "body",
+                            "name": "event",
+                            "required": true,
+                            "schema": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Event updated successfully"
+                        },
+                        "404": {
+                            "description": "Event not found"
+                        }
+                    }
+                },
+                "delete": {
+                    "summary": "Delete an event by ID",
+                    "description": "Remove an event from the database",
+                    "security": [
+                        {
+                            "apiKeyAuth": []
+                        }
+                    ],
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "in": "path",
+                            "required": true,
+                            "type": "string"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Event deleted successfully"
+                        },
+                        "404": {
+                            "description": "Event not found"
+                        }
+                    }
+                }
+            }
+        },
+        "definitions": {
+            "Event": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string"
+                    },
+                    "name": {
+                        "type": "string"
+                    },
+                    "date": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "location": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    }
+                },
+                "required": ["name", "date", "location"]
+            }
+        },
+        "securityDefinitions": {
+            "apiKeyAuth": {
+                "type": "apiKey",
+                "name": "Authorization",
+                "in": "header"
+            }
+        }
+    }
