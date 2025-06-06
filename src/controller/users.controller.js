@@ -3,22 +3,30 @@ import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 
 export const createUser = async (req, res) => {
-  req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.name.replace(
-    / /g,
-    "+"
-  )}&background=random`;
+  try {
+    req.body.avatar = `https://ui-avatars.com/api/?name=${req.body.name.replace(
+      / /g,
+      "+"
+    )}&background=random`;
 
-  // bcrypt para criptgrafar a senha
-  const salt = await bcrypt.genSalt(10);
-  req.body.password = await bcrypt.hash(req.body.password, salt);
-  const db = req.app.locals.db;
-  await db
-    .collection("users")
-    .insertOne(req.body)
-    .then((result) => res.status(201).send(result))
-    .catch((err) => res.status(400).json(err));
+    // bcrypt para criptografar a senha
+    const salt = await bcrypt.genSalt(10);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+    const db = req.app.locals.db;
+    const result = await db.collection("users").insertOne(req.body);
 
-  // jsonwebtoken -> para gerar o JWT
+    if (result.insertedId) {
+      return res
+        .status(201)
+        .json({ success: true, message: "Usuário criado com sucesso" });
+    } else {
+      return res
+        .status(400)
+        .json({ success: false, message: "Falha ao criar usuário" });
+    }
+  } catch (err) {
+    return res.status(400).json({ success: false, error: err.message });
+  }
 };
 
 export const login = async (req, res) => {
@@ -72,7 +80,7 @@ export const login = async (req, res) => {
 
 export const getUser = async (req, res) => {
   const db = req.app.locals.db;
-  const token = req.header("access-token");
+  const token = req.header("access_token");
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await db
     .collection("users")
@@ -83,7 +91,7 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
   const db = req.app.locals.db;
-  const token = req.header("access-token");
+  const token = req.header("access_token");
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const body = req.body;
 
@@ -135,7 +143,7 @@ export const updateUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
   const db = req.app.locals.db;
-  const token = req.header("access-token");
+  const token = req.header("access_token");
   const decoded = jwt.verify(token, process.env.SECRET_KEY);
   const user = await db
     .collection("users")
