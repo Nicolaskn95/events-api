@@ -31,7 +31,7 @@ async function connectToDatabase() {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
-    return client.db(process.env.DB_NAME || "eventDB");
+    return client.db(process.env.MONGODB_URI || "eventDB");
   } catch (err) {
     console.error("MongoDB connection error:", err);
     process.exit(1);
