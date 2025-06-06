@@ -4,16 +4,6 @@ import cors from "cors";
 import dotenv from "dotenv";
 import eventRouter from "./routes/events.routes.js";
 import usersRouter from "./routes/users.routes.js";
-import swaggerUi from "swagger-ui-express";
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, join } from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const swaggerDocument = JSON.parse(
-  readFileSync(join(__dirname, "swagger.json"), "utf8")
-);
 
 dotenv.config();
 
@@ -24,11 +14,15 @@ if (!process.env.MONGODB_URI) {
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    credentials: true,
+  })
+);
 app.use(express.json());
-
-// Swagger setup
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // MongoDB Connection
 const client = new MongoClient(process.env.MONGODB_URI);
@@ -63,7 +57,6 @@ async function connectToDatabase() {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
   });
 })();
 

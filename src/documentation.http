@@ -1,0 +1,47 @@
+### Variables
+@baseUrl = http://localhost:3000/api
+@authToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjg0MjUxYmQ1M2UxYTNhMjFkZjJlMTQyIiwiYXZhdGFyIjoiaHR0cHM6Ly91aS1hdmF0YXJzLmNvbS9hcGkvP25hbWU9Tmljb2xhcytOYWdhbm8mYmFja2dyb3VuZD1yYW5kb20ifSwiaWF0IjoxNzQ5MTc2ODg4LCJleHAiOjE3NDkyNjMyODh9.MIhdIZGdpG5EUotFHwlGE-W7LVDJRk-Mob6P4HQ1R_s"
+
+### Get all events
+GET {{baseUrl}}/events
+Authorization: {{authToken}}
+
+### Search events
+GET {{baseUrl}}/events/search?q=your-search-query
+Authorization: {{authToken}}
+
+### Get event by ID
+GET {{baseUrl}}/events/:id
+Authorization: {{authToken}}
+
+### Create new event
+POST {{baseUrl}}/events
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Event Title",
+    "date": "2024-03-20T10:00:00Z",
+    "location": "Event Location",
+    "description": "Event Description",
+    "capacity": 100,
+    "ticketPrice": 50.00
+}
+
+### Update event
+PUT {{baseUrl}}/events/:id
+Authorization: {{authToken}}
+Content-Type: application/json
+
+{
+    "title": "Updated Event Title",
+    "date": "2024-03-20T10:00:00Z",
+    "location": "Updated Location",
+    "description": "Updated Description",
+    "capacity": 150,
+    "ticketPrice": 75.00
+}
+
+### Delete event
+DELETE {{baseUrl}}/events/:id
+Authorization: {{authToken}} 
