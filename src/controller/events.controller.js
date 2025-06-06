@@ -61,7 +61,7 @@ export const searchEvents = async (req, res) => {
       if (minPrice != undefined) query.ticketPrice.$gte = parseFloat(minPrice);
       if (maxPrice != undefined) query.ticketPrice.$lte = parseFloat(maxPrice);
     }
-    console.log(query);
+
     const events = await eventsCollection.find(query).toArray();
 
     res.json({
@@ -166,20 +166,21 @@ export const updateEvent = async (req, res) => {
     };
 
     const result = await eventsCollection.findOneAndUpdate(
-      { _id: ObjectId.createFromHexString(req.params.id) },
+      { _id: ObjectId.createFromHexString(id) },
       { $set: updateData },
       { returnDocument: "after" }
     );
-
-    if (!result.value) {
+    console.log(result);
+    if (!result) {
       return res.status(404).json({
         success: false,
         error: "Event not found",
       });
     }
 
-    res.json({
+    res.status(200).json({
       success: true,
+      message: "Event updated successfully",
       data: result.value,
     });
   } catch (error) {
