@@ -46,8 +46,7 @@ export const searchEvents = async (req, res) => {
 
     if (startDate || endDate) {
       query.date = {};
-      console.log("Start Date:", startDate);
-      console.log("End Date:", endDate);
+
       if (startDate === endDate) {
         query.date = new Date(startDate);
         return;
@@ -170,7 +169,7 @@ export const updateEvent = async (req, res) => {
       { $set: updateData },
       { returnDocument: "after" }
     );
-    console.log(result);
+
     if (!result) {
       return res.status(404).json({
         success: false,

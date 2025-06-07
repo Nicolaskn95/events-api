@@ -11,14 +11,18 @@ if (!process.env.MONGODB_URI) {
   throw new Error("Missing MONGODB_URI environment variable");
 }
 
+if (!process.env.MONGODB_DB_NAME) {
+  throw new Error("Missing MONGODB_DB_NAME environment variable");
+}
+
 const app = express();
 
 // Middleware
 app.use(
   cors({
     origin: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept", "access_token"],
     credentials: true,
   })
 );
@@ -31,7 +35,7 @@ async function connectToDatabase() {
   try {
     await client.connect();
     console.log("Connected to MongoDB");
-    return client.db(process.env.MONGODB_URI || "eventDB");
+    return client.db(process.env.MONGODB_DB_NAME);
   } catch (err) {
     console.error("MongoDB connection error:", err);
     process.exit(1);

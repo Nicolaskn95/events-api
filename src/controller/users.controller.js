@@ -31,6 +31,7 @@ export const createUser = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const db = req.app.locals.db;
     let user = await db.collection("users").find({ email }).limit(1).toArray();
@@ -85,7 +86,7 @@ export const getUser = async (req, res) => {
   const user = await db
     .collection("users")
     .findOne({ _id: ObjectId.createFromHexString(decoded.user.id) });
-  console.log(user);
+
   res.status(200).json({ user });
 };
 
@@ -105,6 +106,11 @@ export const updateUser = async (req, res) => {
   try {
     const userId = ObjectId.createFromHexString(decoded.user.id);
     const updateData = { ...body, updatedAt: new Date() };
+    if (body.name) {
+      updateData.avatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        body.name
+      )}&background=random`;
+    }
 
     delete updateData._id;
 
@@ -115,7 +121,7 @@ export const updateUser = async (req, res) => {
         { $set: updateData },
         { returnDocument: "after" }
       );
-    console.log("resultado", result);
+
     if (!result) {
       return res.status(404).json({
         success: false,
