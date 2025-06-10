@@ -3,7 +3,6 @@ import authentication from "../middleware/authentication.js";
 import {
   getAllEvents,
   createEvent,
-  getEventById,
   updateEvent,
   deleteEvent,
   searchEvents,

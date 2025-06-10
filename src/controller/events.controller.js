@@ -78,32 +78,6 @@ export const searchEvents = async (req, res) => {
   }
 };
 
-export const getEventById = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const db = req.app.locals.db;
-    const eventsCollection = db.collection("events");
-    const event = await eventsCollection.findOne({
-      _id: ObjectId.createFromHexString(id),
-    });
-
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        error: "Event not found",
-      });
-    }
-
-    res.json(event);
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: "Invalid event ID",
-      details: error.message,
-    });
-  }
-};
-
 export const createEvent = async (req, res) => {
   const db = req.app.locals.db;
   const eventsCollection = db.collection("events");
