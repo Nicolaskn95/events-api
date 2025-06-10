@@ -23,15 +23,21 @@ export const validateEvent = [
 
   body("date")
     .isISO8601()
+    .notEmpty()
+    .withMessage("A data é obrigatória.")
     .withMessage("A data deve estar em formato ISO8601.")
     .toDate(),
 
   body("capacity")
+    .notEmpty()
+    .withMessage("A capacidade é obrigatória.")
     .isInt({ min: 1 })
     .withMessage("A capacidade deve ser um número inteiro maior ou igual a 1."),
 
   body("ticketPrice")
     .isFloat({ min: 0 })
+    .notEmpty()
+    .withMessage("O preço do ingresso é obrigatório.")
     .withMessage("O preço do ingresso deve ser um número maior ou igual a 0."),
 
   body("location")

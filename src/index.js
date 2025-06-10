@@ -2,6 +2,8 @@ import express from "express";
 import { MongoClient } from "mongodb";
 import cors from "cors";
 import dotenv from "dotenv";
+import swaggerUi from "swagger-ui-express";
+import { specs } from "./config/swagger.js";
 import eventRouter from "./routes/events.routes.js";
 import usersRouter from "./routes/users.routes.js";
 
@@ -17,15 +19,26 @@ if (!process.env.MONGODB_DB_NAME) {
 
 const app = express();
 
+// CORS configuration
+const corsOptions = {
+  origin: ["http://localhost:3001"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "Accept",
+    "access_token",
+    "Origin",
+    "X-Requested-With",
+  ],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
 // Middleware
-app.use(
-  cors({
-    origin: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept", "access_token"],
-    credentials: true,
-  })
-);
 app.use(express.json());
 
 // MongoDB Connection
@@ -46,6 +59,17 @@ async function connectToDatabase() {
   const db = await connectToDatabase();
   app.locals.db = db;
 
+  // Swagger UI
+  app.use(
+    "/api-docs",
+    swaggerUi.serve,
+    swaggerUi.setup(specs, {
+      explorer: true,
+      customCss: ".swagger-ui .topbar { display: none }",
+      customSiteTitle: "Events API Documentation",
+    })
+  );
+
   app.use("/api/events", eventRouter);
   app.use("/api/users", usersRouter);
 
@@ -60,6 +84,7 @@ async function connectToDatabase() {
 
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
+    console.log("Swagger UI is running on http://localhost:3001/api-docs");
     console.log(`Server is running on port ${PORT}`);
   });
 })();
