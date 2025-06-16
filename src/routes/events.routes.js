@@ -6,6 +6,7 @@ import {
   updateEvent,
   deleteEvent,
   searchEvents,
+  getEventById,
 } from "../controller/events.controller.js";
 import { validateEvent } from "../middleware/validations.js";
 
@@ -185,5 +186,36 @@ router.put("/:id", authentication, validateEvent, updateEvent);
  *         description: Event not found
  */
 router.delete("/:id", authentication, deleteEvent);
+
+/**
+ * @swagger
+ * /api/events/{id}:
+ *   get:
+ *     summary: Get a single event by ID
+ *     tags: [Events]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Event ID
+ *     responses:
+ *       200:
+ *         description: Event found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Event'
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Event not found
+ *       500:
+ *         description: Invalid event ID
+ */
+router.get("/:id", authentication, getEventById);
 
 export default router;
