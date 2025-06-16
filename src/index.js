@@ -20,8 +20,7 @@ if (!process.env.MONGODB_DB_NAME) {
 const app = express();
 
 // CORS configuration
-const corsOptions = {
-  origin: ["http://localhost:3001"],
+const corsOptions = {  
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Content-Type",
